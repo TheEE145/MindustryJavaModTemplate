@@ -1,36 +1,44 @@
 package example;
 
-import arc.*;
-import arc.util.*;
-import mindustry.*;
-import mindustry.content.*;
-import mindustry.game.EventType.*;
-import mindustry.gen.*;
-import mindustry.mod.*;
-import mindustry.ui.dialogs.*;
+import mindustry.game.EventType;
 
-public class ExampleJavaMod extends Mod{
+import arc.util.Time;
+import arc.util.Log;
 
-    public ExampleJavaMod(){
+import net.tmmc.util.events.Events;
+import net.tmmc.annotations.Mod;
+import net.tmmc.ApplicationMod;
+import net.tmmc.util.UIUtils;
+
+@Mod
+public class ExampleJavaMod extends ApplicationMod {
+    //the code if you want to show exception in dialog
+    //it`s can help modding when causes error
+    //
+    //static {
+    //    Events.postDataRun = (data) -> {
+    //        if(data.hasErrors()) data.causes().forEach(ThrowableUtils::showDialog);
+    //    };
+    //}
+
+    public ExampleJavaMod() {
         Log.info("Loaded ExampleJavaMod constructor.");
+        Events.register(EventType.ClientLoadEvent.class, () -> {
+            var reg = this.atlas.createAnimation("frog", 108);
+            reg.runTrigger(30f);
 
-        //listen for game load event
-        Events.on(ClientLoadEvent.class, e -> {
-            //show dialog upon startup
-            Time.runTask(10f, () -> {
-                BaseDialog dialog = new BaseDialog("frog");
-                dialog.cont.add("behold").row();
-                //mod sprites are prefixed with the mod name (this mod is called 'example-java-mod' in its config)
-                dialog.cont.image(Core.atlas.find("example-java-mod-frog")).pad(20f).row();
-                dialog.cont.button("I see", dialog::hide).size(100f, 50f);
-                dialog.show();
-            });
+            Time.runTask(10f, () -> UIUtils.invoke("frog", table -> {
+                table.add("behold").row();
+                table.image(reg).pad(20f).size(108).row();
+            }));
+
+            //ImageBackgroundRender.pack(this.atlas.get("vietnam"));
         });
     }
 
     @Override
-    public void loadContent(){
+    public void loadContent() {
         Log.info("Loading some example content.");
+        ExampleContent.load();
     }
-
 }
