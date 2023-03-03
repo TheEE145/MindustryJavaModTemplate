@@ -2,18 +2,21 @@ package example;
 
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
-import mindustry.world.Block;
+
+import net.tmmc.util.GraphBlock;
 
 public class ExampleContent {
-    public static Block block1, block2;
+    public static GraphBlock block1, block2;
 
     public static void load() {
-        block1 = new Block("example-block") {{
+        block1 = new GraphBlock("example-block") {{
             this.requirements(Category.defense, ItemStack.empty);
         }};
 
-        block2 = new Block("example-block2") {{
+        block2 = new GraphBlock("example-block2") {{
             this.requirements(Category.defense, ItemStack.empty);
+            this.hasRange = true;
+            this.range = 64;
         }};
     }
 }

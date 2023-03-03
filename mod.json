@@ -15,7 +15,7 @@
         "freesound": false
       },
       {
-        "name": "Freesound contributor",
+        "name": "ScreamStudio",
         "freesound": "true"
       }
     ]
@@ -36,5 +36,12 @@
       "example-java-mod-example-block2",
       "betamindy-chest-large"
     ]
+  },
+  "coreSettings": {
+    "throwExceptionIntoDialog": true,
+    "fixOtherModsRepository": false,
+    "customLoggerPrefix": "example",
+    "useCustomLoggerPrefix": true,
+    "hasErrorRegion": false
   }
 }

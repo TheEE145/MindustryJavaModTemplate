@@ -2,43 +2,36 @@ package example;
 
 import mindustry.game.EventType;
 
-import arc.util.Time;
-import arc.util.Log;
-
+import net.tmmc.graphics.ImageBackgroundRender;
 import net.tmmc.util.events.Events;
-import net.tmmc.annotations.Mod;
 import net.tmmc.ApplicationMod;
 import net.tmmc.util.UIUtils;
 
-@Mod
+@net.tmmc.annotations.Mod
 public class ExampleJavaMod extends ApplicationMod {
-    //the code if you want to show exception in dialog
-    //it`s can help modding when causes error
-    //
-    //static {
-    //    Events.postDataRun = (data) -> {
-    //        if(data.hasErrors()) data.causes().forEach(ThrowableUtils::showDialog);
-    //    };
-    //}
+    {
+        contentLoad(() -> {
+            logger.info("Loading some example content.");
+            ExampleContent.load();
+        });
 
-    public ExampleJavaMod() {
-        Log.info("Loaded ExampleJavaMod constructor.");
-        Events.register(EventType.ClientLoadEvent.class, () -> {
-            var reg = this.atlas.createAnimation("frog", 108);
-            reg.runTrigger(30f);
-
-            Time.runTask(10f, () -> UIUtils.invoke("frog", table -> {
-                table.add("behold").row();
-                table.image(reg).pad(20f).size(108).row();
-            }));
-
-            //ImageBackgroundRender.pack(this.atlas.get("vietnam"));
+        init(() -> {
+            logger.info("Inited " + loadedMod.getDisplayName());
+            logger.info(loadedMod.getRepoURL());
         });
     }
 
-    @Override
-    public void loadContent() {
-        Log.info("Loading some example content.");
-        ExampleContent.load();
+    public ExampleJavaMod() {
+        Events.currentEvent = EventType.ClientLoadEvent.class;
+        Events.register(10, () -> UIUtils.invoke("frog", table -> {
+            var reg = this.atlas.createAnimation("frog", 108);
+            reg.runTrigger(30f);
+
+            table.add("behold").row();
+            table.image(reg).pad(20f).size(108).row();
+            table.button("play siren", adapter.get("siren")::play).size(200, 50);
+
+            ImageBackgroundRender.pack(atlas.get("vietnam"));
+        }));
     }
 }
